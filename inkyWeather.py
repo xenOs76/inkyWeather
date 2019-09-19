@@ -79,10 +79,7 @@ fBox_hx1 = math.floor(f_hx1/fBox_rows)
 print("Display width {}, height {}".format(wx1, hx1)) if debug else None
 print("forecast box fBox_wx1 {}, fBox_hx1 {}".format(fBox_wx1, fBox_hx1)) if debug else None
 
-img_bg = wdir + "/img/inky_circles_bw.png"
-
 img = Image.new("P", (wx1, hx1), color=iWhite)
-#img = Image.open(img_bg)
 draw = ImageDraw.Draw(img)
 
 # clock 
@@ -120,7 +117,6 @@ wCity_wx0 = date_wx0 # define padding?
 wCity_hx0 = date_hx1
 wCity_wx1 = wCity_wx0 + wCity_wsize
 wCity_hx1 = wCity_hx0 + wCity_hsize
-#draw.rectangle([(wCity_wx0, wCity_hx0), (wCity_wx1, wCity_hx1)], fill=iWhite)
 draw.text((wCity_wx0, wCity_hx0), wCity, iBlack, font=wCityFont)
 
 wIcoUnicode = ttfUnicode_from_icon(wIcoCode, wiXmlMap)
@@ -129,7 +125,6 @@ wIco_wx0 = hour_wx1 + 5 # define padding?
 wIco_hx0 = hour_hx0
 wIco_wx1 = wIco_wx0 + wIco_wsize
 wIco_hx1 = wIco_hx0 + wIco_hsize
-#draw.rectangle([(wIco_wx0, wIco_hx0), (wIco_wx1, wIco_hx1)], fill=iWhite)
 draw.text((wIco_wx0, wIco_hx0), wIcoUnicode, iBlack, font=wIcoFont)
 
 wDet_wsize, wDet_hsize = draw.textsize(wDet, wDetFont)
@@ -137,22 +132,27 @@ wDet_wx0 = wIco_wx0
 wDet_hx0 = wIco_hx1
 wDet_wx1 = wIco_wx0 + wDet_wsize
 wDet_hx1 = wDet_hx0 + wDet_hsize
-#draw.rectangle([(wDet_wx0, wDet_hx0), (wDet_wx1, wDet_hx1)], fill=iWhite)
 draw.text((wDet_wx0, wDet_hx0), wDet, iBlack, font=wDetFont)
 
 wTemp = str(math.ceil(wTemp)) + "°C"
 wTemp_wsize, wTemp_hsize = draw.textsize(wTemp, wTempFont)
-wTemp_wx0 = wIco_wx1 + 5 # define padding?
-wTemp_hx0 = 5 # define padding?
-wTemp_wx1 = wTemp_wx0 + wTemp_wsize
-wTemp_hx1 = wTemp_hx0 + wTemp_hsize
-#draw.rectangle([(wTemp_wx0, wTemp_hx0), (wTemp_wx1, wTemp_hx1)], fill=iWhite)
-draw.text((wTemp_wx0, wTemp_hx0), wTemp, iBlack, font=wTempFont)
-
 
 wHum = str(wHum) + "%"
 wHum_wsize, wHum_hsize = draw.textsize(wHum, wHumFont)
-wHum_wx0 = wTemp_wx0 # consider padding?
+
+# padding wValCol (temp and hum): half the space left between icon column and right border
+wValColPadd_wx0 = max(wIco_wx1, wDet_wx1)
+wValColPadd_wsize = int((w_wx1 - wValColPadd_wx0)/2)
+
+wTempPadd_w = int(((wValColPadd_wsize - wTemp_wsize)/2))
+wTemp_wx0 = wValColPadd_wx0 + wTempPadd_w
+wTemp_hx0 = 5 # define padding?
+wTemp_wx1 = wTemp_wx0 + wTemp_wsize
+wTemp_hx1 = wTemp_hx0 + wTemp_hsize
+draw.text((wTemp_wx0, wTemp_hx0), wTemp, iBlack, font=wTempFont)
+
+wHumPadd_w = int(((wValColPadd_wsize - wHum_wsize)/2))
+wHum_wx0 = wValColPadd_wx0 + wHumPadd_w
 wHum_hx0 = wTemp_hx1
 wHum_wx1 = wHum_wx0 + wHum_wsize
 wHum_hx1 = wHum_hx0 + wHum_hsize
@@ -161,7 +161,9 @@ draw.text((wHum_wx0, wHum_hx0), wHum, iBlack, font=wHumFont)
 # sensor data
 sIco = '\uf7db'
 sIco_wsize, sIco_hsize = draw.textsize(sIco, sIcoFont)
-sIco_wx0 = wTemp_wx1 + 5 # consider padding?
+sIcoPadd_wx0 = max(wTemp_wx1, wHum_wx1)
+sIcoPadd_w = int(((w_wx1 - sIcoPadd_wx0) - sIco_wsize)/2)
+sIco_wx0 = wTemp_wx1 + sIcoPadd_w
 sIco_hx0 = wTemp_hx0
 sIco_wx1 = sIco_wx0 + sIco_wsize
 sIco_hx1 = sIco_hx0 + sIco_hsize
@@ -170,7 +172,9 @@ draw.text((sIco_wx0, sIco_hx0), sIco, iBlack, font=sIcoFont)
 sTemp = get_sensor_value_by_mqtt(mqtt_srv, mqtt_sTemp_topic)
 sTemp = str(sTemp) + "°C"
 sTemp_wsize, sTemp_hsize = draw.textsize(sTemp, sTempFont)
-sTemp_wx0 = wTemp_wx1 + 5 # consider padding?
+sTempPadd_wx0 = max(wTemp_wx1, wHum_wx1)
+sTempPadd_w = int(((w_wx1 - sIcoPadd_wx0) - sIco_wsize)/2)
+sTemp_wx0 = wTemp_wx1 + sTempPadd_w
 sTemp_hx0 = sIco_hx1
 sTemp_wx1 = sTemp_wx0 + sTemp_wsize
 sTemp_hx1 = sTemp_hx0 + sTemp_hsize
@@ -179,7 +183,9 @@ draw.text((sTemp_wx0, sTemp_hx0), sTemp, iBlack, font=sTempFont)
 sHum = get_sensor_value_by_mqtt(mqtt_srv, mqtt_sHum_topic)
 sHum = str(sHum) + "%"
 sHum_wsize, sHum_hsize = draw.textsize(sHum, sHumFont)
-sHum_wx0 = wTemp_wx1 + 5 # consider padding?
+sHumPadd_wx0 = max(wTemp_wx1, wHum_wx1)
+sHumPadd_w = int(((w_wx1 - sIcoPadd_wx0) - sIco_wsize)/2)
+sHum_wx0 = wTemp_wx1 + sHumPadd_w
 sHum_hx0 = sTemp_hx1
 sHum_wx1 = sHum_wx0 + sHum_wsize
 sHum_hx1 = sHum_hx0 + sHum_hsize
