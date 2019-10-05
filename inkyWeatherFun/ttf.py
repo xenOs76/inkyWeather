@@ -39,20 +39,26 @@ def ttfUnicode_from_icon( icon,  xml_map):
 
 	# Group 2xx: Thunderstorm
 	ow_iconId_map["11d"] = {"id":"200", "pod":"d"}
+	ow_iconId_map["11n"] = {"id":"200", "pod":"n"}
 
 	# Group 3xx: Drizzle
 	ow_iconId_map["09d"] = {"id":"300", "pod":"d"}
 
 	# Group 5xx: Rain
 	ow_iconId_map["10d"] = {"id":"500", "pod":"d"}
+	ow_iconId_map["10n"] = {"id":"500", "pod":"n"}
 	ow_iconId_map["13d"] = {"id":"501", "pod":"d"}
+	ow_iconId_map["13n"] = {"id":"501", "pod":"n"}
 	ow_iconId_map["09d"] = {"id":"511", "pod":"d"}
+	ow_iconId_map["09n"] = {"id":"511", "pod":"n"}
 
 	# Group 6xx: Snow
 	ow_iconId_map["13d"] = {"id":"600", "pod":"d"}
+	ow_iconId_map["13n"] = {"id":"600", "pod":"n"}
 
 	# Group 7xx: Atmosphere
 	ow_iconId_map["50d"] = {"id":"701", "pod":"d"}
+	ow_iconId_map["50n"] = {"id":"701", "pod":"n"}
 
 	# Group 800: Clear
 	ow_iconId_map["01d"] = {"id":"800", "pod":"d"}

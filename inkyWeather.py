@@ -86,9 +86,11 @@ draw = ImageDraw.Draw(img)
 hours = datetime.now().strftime('%H:%M')
 date = datetime.now().strftime('%a, %b %d')
 
-hour_wx0 = 0
+hour_wsize, hour_hsize = draw.textsize(hours, clockFont)
+hour_wx0 = 5
 hour_hx0 = 0
-hour_wx1, hour_hx1 = draw.textsize(hours, clockFont)
+hour_wx1 = hour_wx0 + hour_wsize
+hour_hx1 = hour_hx0 + hour_hsize
 
 date_wsize, date_hsize = draw.textsize(date, dateFont)
 date_wx0 = 5 # consider padding?
