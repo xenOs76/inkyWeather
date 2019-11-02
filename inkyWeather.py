@@ -194,9 +194,7 @@ sHum_hx1 = sHum_hx0 + sHum_hsize
 draw.text((sHum_wx0, sHum_hx0), sHum, iBlack, font=sHumFont)
 
 
-
-
-sHum = get_sensor_value_by_mqtt(mqtt_srv, mqtt_sHum_topic)
+sHum = get_sensor_value_by_mqtt(mqtt_srv, mqtt_sHum_topic) if debug else None
 print("Sensor data: temp {}, humidity {}".format(sTemp, sHum)) if debug else None
 
 # begin of Forecast boxes
